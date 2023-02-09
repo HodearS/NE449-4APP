@@ -1,0 +1,39 @@
+package TD7;
+
+import java.lang.Math;
+
+public class pi extends Thread
+{
+	long start;
+	long end;
+	double res=0;
+	public pi(long start,long end)
+	{
+		this.start = start;
+		this.end = end;
+		}
+		public void run()
+		{
+			for (long i = start; i <= end; i++)
+			{
+				res = res + (Math.pow(-1, i))/(2*i+1);
+			}
+		}
+	public static void main(String[] args) throws InterruptedException
+	{
+		pi e1 = new pi(0, 50000000);
+		pi e2 = new pi(50000001, 100000000);
+		pi e3 = new pi(100000001, 150000000);
+		pi e4 = new pi(150000001, 200000000);
+		e1.start();
+		e2.start();
+		e3.start();
+		e4.start();
+		e1.join();
+		e2.join();
+		e3.join();
+		e4.join();
+		double euler = e1.res+e2.res+e2.res+e4.res;
+		System.out.println("pi/4="+euler*4);
+	}
+}

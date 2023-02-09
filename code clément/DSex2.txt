@@ -1,0 +1,85 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.*;
+
+import java.io.IOException;
+
+public class ClientTCPScanner extends Thread {
+	
+	private int port;
+
+	public ClientTCPScanner(int port) {
+		// TODO Auto-generated constructor stub
+		super();
+		this.port=port;
+	}
+
+	public static void main(String[] args) throws IOException
+	{
+		ArrayList<ClientTCPScanner> servers = new ArrayList<ClientTCPScanner>();
+		int min=30000, max=32000;
+		
+		for(int i=min; i<=max; i++)
+		{
+			servers.add(new ClientTCPScanner(i));
+			servers.get(i-min).start();
+		}
+	}
+	
+	
+	
+	public void run() 
+	{
+		try
+		{			
+			//Creation de la socket
+			Socket socket = new Socket();
+			
+			// Connexion au serveur 
+			InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", this.port);
+			socket.connect(adrDest);		
+			
+			// Envoi de la requete
+			byte[] bufE = new String("?").getBytes();
+			OutputStream os = socket.getOutputStream();
+			os.write(bufE);
+			
+			// Attente de la reponse 
+			byte[] bufR = new byte[2048];
+			InputStream is = socket.getInputStream();
+			int lenBufR = is.read(bufR);
+
+			if (lenBufR!=-1)
+			{
+				
+				String reponse = new String(bufR, 0 , lenBufR );
+				while(reponse.indexOf("!") == -1)
+				{
+					is = socket.getInputStream();
+					lenBufR = is.read(bufR);
+					reponse = reponse +  new String(bufR, 0 , lenBufR);
+				}
+				
+				
+				if(reponse.contains("GAGNE"))
+				{
+					System.out.println("rep = "+reponse);
+					System.out.println("Le port gagnant est le " + this.port);
+				}
+			}
+			
+			// Fermeture de la socket
+			socket.close();
+			
+		}catch(Exception e) {}
+		
+		
+	}
+	
+
+}

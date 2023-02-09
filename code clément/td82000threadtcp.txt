@@ -1,0 +1,180 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.lang.Math.*;
+import java.util.*;
+import java.util.ArrayList;
+import java.io.*;
+
+
+/**
+ * Serveur basique TCP
+ * UTILISER LA COMMANDE DANS UNE AUTRE FENETRE POUR COM AVEC LE SERVER :  nc 127.0.0.1 21555
+ * cette commande va se conencter au port 21555
+ * PUIS ENVOYER : NUMERO
+ */
+
+public class td8 extends Thread
+{
+
+        int numeroPort;
+        int numeroThread;
+        
+        private NumeroResponse numeroReponse;
+
+        public td8(int numeroPort, int numeroThread, NumeroResponse numeroReponse)
+        {
+                super();
+
+                this.numeroPort = numeroPort;
+                this.numeroThread = numeroThread;
+
+                this.numeroReponse = numeroReponse;
+
+        }
+
+        @Override
+        public  void run()
+        {
+                try
+                {
+                        
+                        ServerSocket socketEcoute = new ServerSocket();
+                        socketEcoute.bind(new InetSocketAddress(numeroPort));
+                        System.out.println("Thread "+numeroThread+" : "+numeroPort);
+
+                int fiak = 0;
+                while(fiak == 0) {
+                        // Attente de la connexion d'un client
+                        //System.out.println("Attente de la connexion du client ...");
+                        Socket socketConnexion = socketEcoute.accept();
+
+                        //Incrémentation du numéro
+                        this.numeroReponse.Reponse();
+
+
+                        
+                        // Affichage du port et de l'ip du client
+                        System.out.println("Thread "+ numeroThread+" : un client est connecté (IP : "
+                                +socketConnexion.getInetAddress()+", PORT : "+socketConnexion.getPort()+")");
+        
+                        
+                        // Un client s'est connecte, le serveur lit le message envoye par le client (sans garantie de lire tout le message)
+                        byte[] bufR = new byte[2048];
+                        InputStream is = socketConnexion.getInputStream();
+                        int lenBufR = is.read(bufR);
+                        if (lenBufR!=-1)
+                        {
+
+                                String message = new String(bufR, 0 , lenBufR);
+                                System.out.println("Message recu : "+message);
+                                message = message.replace("\n","");
+                                if(message.contains("NUMERO"))
+                                {
+                                        //Réponse du serveur
+                                        String response = message+"=" + numeroReponse.n+"\n";
+
+                                        byte[] bufE = new String(response).getBytes();
+                                        OutputStream os = socketConnexion.getOutputStream();
+                                        os.write(bufE);
+
+                                }        
+                                else
+                                {
+                                        //Erreur
+                                        byte[] bufE = new String("VOUS AVEZ FAIT UNE ERREUR").getBytes();
+                                        OutputStream os = socketConnexion.getOutputStream();
+                                        os.write(bufE);
+
+                                }
+
+                                
+                        
+                        }
+                        else
+                        {
+                                //Message d'erreur
+                                byte[] bufE = new String("Erreur").getBytes();
+                                OutputStream os = socketConnexion.getOutputStream();
+                                os.write(bufE);
+
+                        }
+                        
+                        
+                        
+                        
+                        // Fermeture de la socket de connexion
+                        socketConnexion.close();
+                                
+                
+                        // Arret du serveur
+                        socketEcoute.close();
+                        System.out.println("Arret du serveur .");
+                }
+
+                }
+                catch (Exception e) {
+
+                        System.out.println("Erreur : " + e.getMessage());
+                                
+                }
+
+                
+
+                        
+
+                
+        }
+
+
+
+        public static void main(String[] args) throws InterruptedException
+        {
+                
+                //Nombre de threads
+                int nbServeur = 2000;
+
+                ArrayList<td8>  threadServeurTCP = new ArrayList<td8>();
+
+                //Réponse Serveur
+                NumeroResponse num = new NumeroResponse(0);
+
+
+                //Création des threads
+                for(int i = 0 ; i <= nbServeur ; i++)
+                {
+                        threadServeurTCP.add(new td8(i+21000, i, num));
+                }
+
+
+                //Start des threads
+                for(int i = 0 ; i <= nbServeur ; i++)
+                {
+                        threadServeurTCP.get(i).start();
+                }
+
+
+        }
+
+        static class NumeroResponse
+    {
+      int n;
+
+      public NumeroResponse (int n)
+      {
+              this.n = n;
+      }
+
+      public void Reponse()
+      {
+         n++;
+      }
+    }
+
+
+        
+
+}

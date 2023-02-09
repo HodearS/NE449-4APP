@@ -1,0 +1,55 @@
+package job;
+
+import java.io.InterruptedIOException;
+import java.lang.*;
+
+
+public class ex3 extends Thread {
+        String name;
+        
+        public ex3(String name) {
+        this.name=name;
+        }
+        
+        public void run()
+        {
+                int i = (int)(Math.random()*10000);
+                System.out.println("Thread : "+name);
+                try {
+                        Thread.sleep(i);
+                }
+                catch (InterruptedException ie) {
+                        System.out.println("error la");
+                }
+                if(name=="4") {
+                        ex3 six = new ex3("6");
+                        six.start();
+                }
+        }
+        
+        public static void main(String[] args) throws  InterruptedException {
+                
+                ex3 un = new ex3("1");
+                ex3 deux = new ex3("2");
+                ex3 trois = new ex3("3");
+                ex3 quatre = new ex3("4");
+                ex3 cinq = new ex3("5");
+                ex3 spept = new ex3("7");
+
+                
+                un.start();
+                un.join();
+                deux.start();
+                trois.start();
+                quatre.start();
+                deux.join();
+                trois.join();
+                cinq.start();
+                quatre.join();
+                cinq.join();
+                spept.start();
+                
+                
+        }
+
+}

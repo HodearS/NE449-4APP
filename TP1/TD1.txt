@@ -1,0 +1,23 @@
+Exercice 1 : Echange UDP avec l'outil netcat (avec une seule
+machine)
+
+commande d'activation UDP      --> nc -ul -p 2000 
+commande dans l'autre console  --> nc -u 127.0.1 2000
+-u   --> permet d'activer le mode UDP 
+-l   --> permet d'activer le mode lecture
+-p   --> permet de fixer le numero de port (ici 2000)
+
+On peut analyser la trame avec WireShark
+
+oui il l'est car il faut d'abord mettre l'une des console en récéption.
+ici la connexion parait e^tre possible mais l'envoie d'inforamtion ne l'est pas
+
+
+Exercice 2 : Echange UDP avec l'outil netcat (avec deux
+machines)
+
+commande d'activation UDP entre deux PC
+Il faut tout d'abord connaitre l'adresse IP de l'ordinateur du voisin
+ici 192.168.130.(23)
+
+puis ensuit on utilise la comande --> nc -u 192.168.130.23 2000

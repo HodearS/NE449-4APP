@@ -1,0 +1,44 @@
+package job;
+
+import java.io.InterruptedIOException;
+import java.lang.*;
+
+
+public class ex3 extends Thread {
+        int name;
+        
+        public ex3(int j) {
+        this.name=j;
+        }
+        
+        public void run()
+        {
+                int tarte=1;
+                while(tarte==1) {
+                System.out.println("SAUCE BARBECUE"+name);
+                try {
+                        Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+                
+                System.out.println("SHOMPSHOMP"+name);
+                }
+        }
+        
+        public static void main(String[] args) throws  InterruptedException {
+                
+                ex3[] philo = new ex3[50];
+                for (int i=0; i<50;i++) {
+                        philo[i] = new ex3(i);
+                        }
+                
+
+                for ( int i=0; i<50;i++) {
+                        philo[i].start();
+                        }
+                
+        }
+
+}

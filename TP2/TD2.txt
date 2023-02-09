@@ -1,0 +1,38 @@
+Exercice 1 : afficher une fenêtre de couleur en JAVA
+
+package fr.esisar;c
+
+import java.awt.Color;
+import java.io.IOException;
+import javax.swing.JFrame;
+
+public class ColorFrame
+{
+    public static void main(String[] args) throws IOException,
+        InterruptedException
+        {
+            // Crée une frame nommé Chenillard de taille 300x300
+            JFrame frame = new JFrame("Chenillard");
+            frame.setSize(300,300);
+            
+            // Set l'arrière plan de la frame en vert, et rend la frame visible
+            frame.getContentPane().setBackground(Color.GREEN);
+            frame.setVisible(true);
+            Thread.sleep(2000);
+            
+            // Après 2s, l'arrière plan ce change en rouge
+            frame.getContentPane().setBackground(Color.RED);
+            frame.setVisible(true);
+            Thread.sleep(2000);
+            
+            // puis en vert après 2s
+            frame.getContentPane().setBackground(Color.GREEN);
+            frame.setVisible(true);
+            Thread.sleep(2000);
+            
+            // et pour finir il se ferme au bout de 2s supplémentaire
+            frame.dispose();
+        }
+}
+
+Exercice 2 : Le chenillard 

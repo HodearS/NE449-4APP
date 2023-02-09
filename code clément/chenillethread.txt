@@ -1,0 +1,51 @@
+
+
+import java.awt.Color;import java.io.IOException;import java.net.DatagramPacket;import java.net.DatagramSocket;import java.net.InetSocketAddress;import java.net.SocketException;import java.io.IOException;import javax.swing.JFrame;
+
+
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		int DEFAULT_PORT = 3000;
+		int WINDOW_SIZE =  300;
+		int windowNumber =Integer.valueOf(args[0]);
+		
+		int currentPort = DEFAULT_PORT+ windowNumber;
+		int nextPort = windowNumber==  4 ? DEFAULT_PORT+ 1 : currentPort +1 ;    
+		JFrame frame = new JFrame("Chenillard"+ currentPort);        
+		frame.setSize(300, 300);        
+		frame.setLocation(windowNumber*WINDOW_SIZE,windowNumber);        
+		frame.getContentPane().setBackground(Color.GREEN);        
+		frame.setVisible(true);
+		
+		   while(true)        
+		   {
+			   DatagramSocket socket = new DatagramSocket(null);        
+			   socket = new DatagramSocket(null);        
+			   socket.bind(new InetSocketAddress(currentPort));
+			   
+			   byte[] bufR = new byte[2048];            
+			   DatagramPacket dpR = new DatagramPacket(bufR, bufR.length);            
+			   socket.receive(dpR);            
+			   String message = new String(bufR, dpR.getOffset(), dpR.getLength());            
+			   System.out.println("Message recu = "+message);            
+			   socket.close();            
+			   frame.getContentPane().setBackground(Color.RED);            
+			   frame.setVisible(true);
+			   
+	           Thread.sleep(1000);            
+	           //            
+	           frame.getContentPane().setBackground(Color.GREEN);            
+	           frame.setVisible(true);            
+	           socket = new DatagramSocket();
+	           
+	           InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", nextPort);            
+	           byte[] bufE = new String("hello").getBytes();            
+	           DatagramPacket dpE = new DatagramPacket(bufE, bufE.length, adrDest);            
+	           socket.send(dpE);            
+	           System.out.println("Message envoyÃ©."+ nextPort);            
+	           socket.close();
+		   
+		   }
+	}
+}

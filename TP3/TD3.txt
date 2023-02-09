@@ -1,0 +1,21 @@
+Exercice 1 : Manipulation avec l'outil netcat
+
+commande d'activation TCP      --> nc -l -p 2000 
+commande dans l'autre console  --> nc 127.0.1 2000
+-l   --> permet d'activer le mode lecture
+-p   --> permet de fixer le numero de port (ici 2000)
+
+On peut analyser la trame avec WireShark
+
+oui il l'est car il faut d'abord mettre l'une des console en récéption
+Avec ce protocol de communication, la connexion par client direct n'est pas possibl
+
+
+Exercice 2 : Envoi de segment TCP avec un programme simple
+
+cf. code Client TCP dans le dossier TD3
+
+
+
+
+

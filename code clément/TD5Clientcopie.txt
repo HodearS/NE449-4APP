@@ -1,0 +1,74 @@
+//package tcp;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
+import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
+/**
+ * Client basique TCP
+ * 
+ */
+public class ClientTCP
+{
+
+	public static void main(String[] args) throws Exception
+	{
+		ClientTCP clientTCP = new ClientTCP();
+		clientTCP.execute();				
+	}
+								
+	/**
+	 * Le client cree une socket, envoie un message au serveur
+	 * et attend la reponse 
+	 * 
+	 */
+	private void execute() throws IOException
+	{
+		//
+		System.out.println("Demarrage du client ...\n");
+		System.out.println("Veuillez rentrer le nom du fichier\n");
+		System.out.println("nom du fichier : fiakos.txt \n");
+		String fichier = "fiakos.txt";
+		//Creation de la socket
+		Socket socket = new Socket();
+		
+		// Connexion au serveur 
+		InetSocketAddress adrDest = new InetSocketAddress("127.0.0.1", 7500);
+		socket.connect(adrDest);
+		
+		// Envoi du nom du fichier
+		byte[] bufE = new String(fichier).getBytes();
+		OutputStream os = socket.getOutputStream();
+		os.write(bufE);
+		System.out.println("Message envoye\n");
+		
+		byte[] bufR = new byte[2048];
+		InputStream is = socket.getInputStream();
+		File dest = new File("/home/userir/Downloads/exo4testo.txt");
+		//OutputStream os = null;
+		
+			try {
+				os = new FileOutputStream(dest);
+			    int len;
+			    while ((len = is.read(bufR)) > 0) {
+			    	os.write(bufR, 0, len);
+			    }
+			    os.close();
+			}	
+			catch(IOException e){
+				e.printStackTrace();
+			}
+
+		// Fermeture de la socket
+		socket.close();
+		System.out.println("Arret du client .");
+	}
+}

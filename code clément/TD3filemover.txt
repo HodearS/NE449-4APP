@@ -1,0 +1,27 @@
+import java.io.*;
+
+public class Main {
+  
+  public static void main(String args[]) {
+    
+    File src = new File("C:\\Users\\PC\\Desktop\\src.txt");
+    File dest = new File("C:\\Users\\PC\\Desktop\\dest.txt");
+    InputStream is = null;
+    OutputStream os = null;
+  
+    try {
+        is = new FileInputStream(src);
+        os = new FileOutputStream(dest);
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = is.read(buffer)) > 0) {
+            os.write(buffer, 0, len);
+        }
+        is.close();
+        os.close();
+    }
+    catch(IOException e){
+        e.printStackTrace();
+    }
+  }
+}

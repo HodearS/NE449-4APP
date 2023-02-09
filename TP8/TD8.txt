@@ -1,0 +1,33 @@
+Exercice 0 – Le problème de la concurrence.
+
+Le problème de ce code est que les deux threads travail en concurrence sur le même objet.
+Si deux threads utilisent au même moment cet objet, alors il y a aura un problème. Il faut noter que ce problème est amplifié avec la programmation objet, mais
+il est aussi présent dans la programmation C classique. (phrase du CM3 slide 33)
+
+
+Pour regler le problème, deux solution sont possible :
+
+solution 1 : --> crée deux objets distinct
+Somme somme1 = new Somme();
+Somme somme2 = new Somme();
+Calculatrice c1 = new Calculatrice(somme1);
+Calculatrice c2 = new Calculatrice(somme2);
+
+solution 2 : --> utiliser "synchronized"
+public class Somme
+{
+    int c;
+    public int somme(int a, int b)
+    {
+        synchronized(this)
+        {
+            c=a+b;
+            System.out.println("c="+c);
+            return c;
+        }
+    }
+}
+
+
+
+
